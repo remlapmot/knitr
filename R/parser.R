@@ -20,7 +20,9 @@ split_file = function(lines, set.preamble = TRUE, patterns = knit_patterns$get()
     knit_concord$set(inlines = sapply(groups, length)) # input line numbers for concordance
 
   # parse 'em all
-  lapply(groups, function(g) {
+  lapply(seq_along(groups), function(i) {
+    knit_concord$set(block = i)
+    g = groups[[i]]
     block = grepl(chunk.begin, g[1])
     if (!set.preamble && !parent_mode()) {
       return(if (block) '' else g) # only need to remove chunks to get pure preamble
