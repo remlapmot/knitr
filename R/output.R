@@ -335,6 +335,15 @@ process_file = function(text, output) {
   res
 }
 
+# if an expr throws an an error, message the location of the error if possible
+handle_error = function(expr, handler, label = '') {
+  withCallingHandlers(expr, error = function(e) {
+    # return a string to point out the error location
+    loc = paste0(current_lines(), label, sprintf(' (%s)', knit_concord$get('infile')))
+    message(one_string(handler(e, loc)))
+  })
+}
+
 auto_out_name = function(input, ext = tolower(file_ext(input))) {
   base = sans_ext(input)
   name = if (opts_knit$get('tangle')) c(base, '.R') else
