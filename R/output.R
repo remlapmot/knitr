@@ -311,7 +311,8 @@ process_file = function(text, output) {
     }
     if (progress && is.function(pb$update)) pb$update(i)
     group = groups[[i]]
-    res[i] = withCallingHandlers(
+    knit_concord$set(block = i)
+    res[i] = handle_error(
       withCallingHandlers(
         if (tangle) process_tangle(group) else process_group(group),
         error = function(e) if (xfun::pkg_available('rlang', '1.0.0')) rlang::entrace(e)
